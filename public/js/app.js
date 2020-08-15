@@ -80321,7 +80321,7 @@ var bookManagementState = Object(recoil__WEBPACK_IMPORTED_MODULE_0__["atom"])({
     isbn: "",
     total_pages: 0,
     published_date: "",
-    author: []
+    authors: []
   }
 });
 
@@ -80454,7 +80454,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     isMulti: true,
     className: "basic-multi-select",
     classNamePrefix: "select",
-    onChange: props.onChange
+    onChange: props.onChange,
+    value: props.value
   });
 });
 
@@ -80776,6 +80777,7 @@ var ModalAuthor = function ModalAuthor(props) {
         return console.error(err);
       });
     } else {
+      delete data.id;
       axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("".concat(_constant_values__WEBPACK_IMPORTED_MODULE_2__["API_SERVER"], "/author"), authorModalState[0], {
         headers: {
           authorization: "Bearer " + (JSON.parse(localStorage.getItem("authorization")) || {}).access_token
@@ -80957,8 +80959,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _constant_values__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../constant/values */ "./resources/js/constant/values.js");
 /* harmony import */ var _atom_global__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../atom/global */ "./resources/js/atom/global.js");
 /* harmony import */ var _components_CustomSelect__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../components/CustomSelect */ "./resources/js/components/CustomSelect.js");
-var _this = undefined;
-
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -81000,7 +81000,7 @@ var ModalBooks = function ModalBooks(props) {
   var saveData = function saveData() {
     var data = _objectSpread({}, bookModalState[0]);
 
-    data.author = data.author.reduce(function (s, v) {
+    data.authors = (data.authors || []).reduce(function (s, v) {
       s = [].concat(_toConsumableArray(s), [v.value]);
       return s;
     }, []);
@@ -81016,6 +81016,7 @@ var ModalBooks = function ModalBooks(props) {
         return console.error(err);
       });
     } else {
+      delete data.id;
       axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("".concat(_constant_values__WEBPACK_IMPORTED_MODULE_4__["API_SERVER"], "/book"), data, {
         headers: {
           authorization: "Bearer " + (JSON.parse(localStorage.getItem("authorization")) || {}).access_token
@@ -81097,13 +81098,14 @@ var ModalBooks = function ModalBooks(props) {
       color: "red"
     }
   }, "*")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_CustomSelect__WEBPACK_IMPORTED_MODULE_6__["default"], {
-    onChange: function onChange(author) {
+    onChange: function onChange(authors) {
       return setBookModalState(function (old) {
         return _objectSpread(_objectSpread({}, old), {}, {
-          author: author
+          authors: authors
         });
       });
-    }
+    },
+    value: bookModalState[0].authors
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "form-group"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
@@ -81186,7 +81188,7 @@ var ModalBooks = function ModalBooks(props) {
         authorization: "Bearer " + (JSON.parse(localStorage.getItem("authorization")) || {}).access_token
       }
     }).then(function () {
-      _this.fetchData();
+      fetchData();
     })["catch"](function (err) {
       return console.error(err);
     });

@@ -29,6 +29,7 @@ export default props => {
             className="basic-multi-select"
             classNamePrefix="select"
             onChange={props.onChange}
+            value={props.value}
         />
     );
 };

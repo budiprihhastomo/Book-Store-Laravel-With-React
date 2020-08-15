@@ -31,6 +31,7 @@ const ModalAuthor = props => {
                 })
                 .catch(err => console.error(err));
         } else {
+            delete data.id;
             Axios.post(`${API_SERVER}/author`, authorModalState[0], {
                 headers: {
                     authorization:

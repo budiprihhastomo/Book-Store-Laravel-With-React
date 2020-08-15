@@ -19,6 +19,6 @@ export const bookManagementState = atom({
         isbn: "",
         total_pages: 0,
         published_date: "",
-        author: []
+        authors: []
     }
 });

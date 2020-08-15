@@ -12,8 +12,7 @@ const ModalBooks = props => {
 
     const saveData = () => {
         const data = { ...bookModalState[0] };
-
-        data.author = data.author.reduce((s, v) => {
+        data.authors = (data.authors || []).reduce((s, v) => {
             s = [...s, v.value];
             return s;
         }, []);
@@ -33,6 +32,7 @@ const ModalBooks = props => {
                 })
                 .catch(err => console.error(err));
         } else {
+            delete data.id;
             Axios.post(`${API_SERVER}/book`, data, {
                 headers: {
                     authorization:
@@ -108,9 +108,10 @@ const ModalBooks = props => {
                             Author <span style={{ color: "red" }}>*</span>
                         </label>
                         <Select
-                            onChange={author =>
-                                setBookModalState(old => ({ ...old, author }))
+                            onChange={authors =>
+                                setBookModalState(old => ({ ...old, authors }))
                             }
+                            value={bookModalState[0].authors}
                         />
                     </div>
                     <div className="form-group">
@@ -195,7 +196,7 @@ export default () => {
             }
         })
             .then(() => {
-                this.fetchData();
+                fetchData();
             })
             .catch(err => console.error(err));
     };
