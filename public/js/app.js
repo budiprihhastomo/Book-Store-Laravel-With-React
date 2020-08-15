@@ -73259,7 +73259,7 @@ __webpack_require__.r(__webpack_exports__);
 var authorManagementState = Object(recoil__WEBPACK_IMPORTED_MODULE_0__["atom"])({
   key: "authorManagement",
   "default": {
-    id: "",
+    id: null,
     first_name: "",
     middle_name: "",
     last_name: ""
@@ -73268,7 +73268,7 @@ var authorManagementState = Object(recoil__WEBPACK_IMPORTED_MODULE_0__["atom"])(
 var bookManagementState = Object(recoil__WEBPACK_IMPORTED_MODULE_0__["atom"])({
   key: "bookManagement",
   "default": {
-    id: "",
+    id: null,
     title: "",
     rating: "",
     isbn: "",
@@ -73651,11 +73651,35 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
-var ModalBooks = function ModalBooks() {
+var ModalAuthor = function ModalAuthor(props) {
   var authorModalState = Object(recoil__WEBPACK_IMPORTED_MODULE_4__["useRecoilState"])(_atom_global__WEBPACK_IMPORTED_MODULE_5__["authorManagementState"]);
   var setAuthorModalState = Object(recoil__WEBPACK_IMPORTED_MODULE_4__["useSetRecoilState"])(_atom_global__WEBPACK_IMPORTED_MODULE_5__["authorManagementState"]);
 
-  var saveData = function saveData() {};
+  var saveData = function saveData() {
+    if (authorModalState[0].id) {
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.patch("".concat(_constant_values__WEBPACK_IMPORTED_MODULE_2__["API_SERVER"], "/author/").concat(authorModalState[0].id), authorModalState[0], {
+        headers: {
+          authorization: "Bearer " + (JSON.parse(localStorage.getItem("authorization")) || {}).access_token
+        }
+      }).then(function (res) {
+        console.log(res);
+      })["catch"](function (err) {
+        return console.error(err);
+      });
+    } else {
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("".concat(_constant_values__WEBPACK_IMPORTED_MODULE_2__["API_SERVER"], "/author"), authorModalState[0], {
+        headers: {
+          authorization: "Bearer " + (JSON.parse(localStorage.getItem("authorization")) || {}).access_token
+        }
+      }).then(function (res) {
+        console.log(res);
+      })["catch"](function (err) {
+        return console.error(err);
+      });
+    }
+
+    props.onRefresh();
+  };
 
   var onChangeHandle = function onChangeHandle(_ref) {
     var target = _ref.target;
@@ -73726,6 +73750,7 @@ var ModalBooks = function ModalBooks() {
 
 /* harmony default export */ __webpack_exports__["default"] = (function () {
   var setAuthorModalState = Object(recoil__WEBPACK_IMPORTED_MODULE_4__["useSetRecoilState"])(_atom_global__WEBPACK_IMPORTED_MODULE_5__["authorManagementState"]);
+  var resetAuthorModalState = Object(recoil__WEBPACK_IMPORTED_MODULE_4__["useResetRecoilState"])(_atom_global__WEBPACK_IMPORTED_MODULE_5__["authorManagementState"]);
 
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
       _useState2 = _slicedToArray(_useState, 2),
@@ -73767,7 +73792,14 @@ var ModalBooks = function ModalBooks() {
     className: "card"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "card-header bg-transparent"
-  }, "Books Management"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "d-flex justify-content-between"
+  }, "Author Management", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    className: "btn btn-sm btn-success",
+    "data-toggle": "modal",
+    "data-target": "#modalAuthorsManagement",
+    onClick: resetAuthorModalState
+  }, "+"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "card-body"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
     className: "table"
@@ -73782,19 +73814,17 @@ var ModalBooks = function ModalBooks() {
       "data-toggle": "modal",
       "data-target": "#modalAuthorsManagement",
       onClick: function onClick() {
-        return setAuthorModalState({
-          first_name: item.first_name,
-          middle_name: item.middle_name,
-          last_name: item.last_name
-        });
+        return setAuthorModalState(item);
       }
     }, "Edit"), ((JSON.parse(localStorage.getItem("authorization")) || {}).user || {}).role === 1 ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
       className: "btn btn-sm btn-danger",
       onClick: function onClick() {
         return removeData(item.id);
       }
-    }, "Hapus") : null));
-  })))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ModalBooks, null));
+    }, "Delete") : null));
+  })))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ModalAuthor, {
+    onRefresh: fetchData
+  }));
 });
 
 /***/ }),

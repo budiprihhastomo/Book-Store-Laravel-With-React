@@ -2,14 +2,52 @@ import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import { API_SERVER } from "../constant/values";
 import Modal from "../components/Modal";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState, useResetRecoilState } from "recoil";
 import { authorManagementState } from "../atom/global";
 
-const ModalBooks = () => {
+const ModalAuthor = props => {
     const authorModalState = useRecoilState(authorManagementState);
     const setAuthorModalState = useSetRecoilState(authorManagementState);
 
-    const saveData = () => {};
+    const saveData = () => {
+        if (authorModalState[0].id) {
+            Axios.patch(
+                `${API_SERVER}/author/${authorModalState[0].id}`,
+                authorModalState[0],
+                {
+                    headers: {
+                        authorization:
+                            "Bearer " +
+                            (
+                                JSON.parse(
+                                    localStorage.getItem("authorization")
+                                ) || {}
+                            ).access_token
+                    }
+                }
+            )
+                .then(res => {
+                    console.log(res);
+                })
+                .catch(err => console.error(err));
+        } else {
+            Axios.post(`${API_SERVER}/author`, authorModalState[0], {
+                headers: {
+                    authorization:
+                        "Bearer " +
+                        (
+                            JSON.parse(localStorage.getItem("authorization")) ||
+                            {}
+                        ).access_token
+                }
+            })
+                .then(res => {
+                    console.log(res);
+                })
+                .catch(err => console.error(err));
+        }
+        props.onRefresh();
+    };
 
     const onChangeHandle = ({ target }) => {
         return setAuthorModalState(oldState => ({
@@ -79,7 +117,9 @@ const ModalBooks = () => {
 
 export default () => {
     const setAuthorModalState = useSetRecoilState(authorManagementState);
+    const resetAuthorModalState = useResetRecoilState(authorManagementState);
     const [data, setData] = useState([]);
+
     useEffect(() => {
         fetchData();
     }, []);
@@ -118,7 +158,17 @@ export default () => {
             <div className="mt-5">
                 <div className="card">
                     <div className="card-header bg-transparent">
-                        Books Management
+                        <div className="d-flex justify-content-between">
+                            Author Management
+                            <button
+                                className="btn btn-sm btn-success"
+                                data-toggle="modal"
+                                data-target="#modalAuthorsManagement"
+                                onClick={resetAuthorModalState}
+                            >
+                                +
+                            </button>
+                        </div>
                     </div>
                     <div className="card-body">
                         <table className="table">
@@ -147,14 +197,7 @@ export default () => {
                                                 data-toggle="modal"
                                                 data-target="#modalAuthorsManagement"
                                                 onClick={() =>
-                                                    setAuthorModalState({
-                                                        first_name:
-                                                            item.first_name,
-                                                        middle_name:
-                                                            item.middle_name,
-                                                        last_name:
-                                                            item.last_name
-                                                    })
+                                                    setAuthorModalState(item)
                                                 }
                                             >
                                                 Edit
@@ -174,7 +217,7 @@ export default () => {
                                                         removeData(item.id)
                                                     }
                                                 >
-                                                    Hapus
+                                                    Delete
                                                 </button>
                                             ) : null}
                                         </td>
@@ -185,7 +228,7 @@ export default () => {
                     </div>
                 </div>
             </div>
-            <ModalBooks />
+            <ModalAuthor onRefresh={fetchData} />
         </>
     );
 };

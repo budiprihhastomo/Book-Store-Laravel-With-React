@@ -3,7 +3,7 @@ import { atom } from "recoil";
 export const authorManagementState = atom({
     key: "authorManagement",
     default: {
-        id: "",
+        id: null,
         first_name: "",
         middle_name: "",
         last_name: ""
@@ -13,7 +13,7 @@ export const authorManagementState = atom({
 export const bookManagementState = atom({
     key: "bookManagement",
     default: {
-        id: "",
+        id: null,
         title: "",
         rating: "",
         isbn: "",
