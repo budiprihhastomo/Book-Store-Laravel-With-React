@@ -1,17 +1,20 @@
-import React, { Component, useState } from "react";
+import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import { API_SERVER } from "../constant/values";
 import Modal from "../components/Modal";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { bookManagementState } from "../atom/global";
 
-const ModalBooks = props => {
-    const [modal, setModal] = useState({
-        title: props.state.title || "",
-        rating: props.state.rating || "",
-        isbn: props.state.isbn || "",
-        total_pages: props.state.total_pages || "",
-        published_date: props.state.published_date
-    });
+const ModalBooks = () => {
+    const bookModalState = useRecoilState(bookManagementState);
+    const setBookModalState = useSetRecoilState(bookManagementState);
 
+    const onChangeHandle = ({ target }) => {
+        return setBookModalState(oldState => ({
+            ...oldState,
+            [target.name]: target.value
+        }));
+    };
     return (
         <Modal
             name="modalBooksManagement"
@@ -32,10 +35,8 @@ const ModalBooks = props => {
                             name="title"
                             aria-describedby="title"
                             placeholder="Enter Book Title"
-                            value={props.state.title}
-                            onChange={({ target }) =>
-                                setModal({ ...modal, title: target.value })
-                            }
+                            value={bookModalState[0].title}
+                            onChange={onChangeHandle}
                         />
                     </div>
                     <div className="form-group">
@@ -46,9 +47,10 @@ const ModalBooks = props => {
                             className="form-control"
                             name="rating"
                             id="rating"
-                            value={props.state.rating}
+                            value={bookModalState[0].rating}
+                            onChange={onChangeHandle}
                         >
-                            <option selected disabled>
+                            <option value="" disabled>
                                 Choose Rating
                             </option>
                             <option value="1">1</option>
@@ -69,7 +71,8 @@ const ModalBooks = props => {
                             name="isbn"
                             aria-describedby="isbn"
                             placeholder="Enter ISBN"
-                            value={props.state.isbn}
+                            value={bookModalState[0].isbn}
+                            onChange={onChangeHandle}
                         />
                     </div>
                     <div className="form-group">
@@ -82,7 +85,8 @@ const ModalBooks = props => {
                             id="total_pages"
                             name="total_pages"
                             placeholder="How many pages ?"
-                            value={props.state.total_pages}
+                            value={bookModalState[0].total_pages}
+                            onChange={onChangeHandle}
                         />
                     </div>
                     <div className="form-group">
@@ -95,7 +99,8 @@ const ModalBooks = props => {
                             className="form-control"
                             id="published_date"
                             name="published_date"
-                            value={props.state.published_date}
+                            value={bookModalState[0].published_date}
+                            onChange={onChangeHandle}
                         />
                     </div>
                 </form>
@@ -104,20 +109,15 @@ const ModalBooks = props => {
     );
 };
 
-export default class BooksManagement extends Component {
-    constructor() {
-        super();
-        this.state = {
-            data: [],
-            modal: {}
-        };
-        this.removeData = this.removeData.bind(this);
-    }
-    componentDidMount() {
-        this.fetchData();
-    }
+export default () => {
+    const [data, setData] = useState([]);
+    const setBookModalState = useSetRecoilState(bookManagementState);
 
-    fetchData() {
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const fetchData = () => {
         Axios.get(`${API_SERVER}/book`, {
             headers: {
                 authorization: (
@@ -126,12 +126,12 @@ export default class BooksManagement extends Component {
             }
         })
             .then(({ data }) => {
-                this.setState({ data: data.data });
+                setData(data.data);
             })
             .catch(err => console.error(err));
-    }
+    };
 
-    removeData(id) {
+    const removeData = id => {
         Axios.delete(`${API_SERVER}/book/${id}`, {
             headers: {
                 authorization:
@@ -140,90 +140,80 @@ export default class BooksManagement extends Component {
                         .access_token
             }
         })
-            .then(({ data }) => {
+            .then(() => {
                 this.fetchData();
             })
             .catch(err => console.error(err));
-    }
+    };
 
-    openModal(data) {
-        ModalBooks(data);
-    }
-
-    render() {
-        return (
-            <>
-                <div className="mt-5">
-                    <div className="card">
-                        <div className="card-header bg-transparent">
-                            Books Management
-                        </div>
-                        <div className="card-body">
-                            <table className="table">
-                                <thead>
-                                    <tr>
-                                        <th>Title</th>
-                                        <th>Total Pages</th>
-                                        <th>Rating</th>
-                                        <th>ISBN</th>
-                                        <th>Published Date</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {this.state.data.map((item, idx) => (
-                                        <tr key={idx}>
-                                            <td>{item.title}</td>
-                                            <td>{item.total_pages}</td>
-                                            <td>{item.rating}</td>
-                                            <td>{item.isbn}</td>
-                                            <td>{item.published_date}</td>
-                                            <td>
+    return (
+        <>
+            <div className="mt-5">
+                <div className="card">
+                    <div className="card-header bg-transparent">
+                        Books Management
+                    </div>
+                    <div className="card-body">
+                        <table className="table">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Total Pages</th>
+                                    <th>Rating</th>
+                                    <th>ISBN</th>
+                                    <th>Published Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {data.map((item, idx) => (
+                                    <tr key={idx}>
+                                        <td>{item.title}</td>
+                                        <td>{item.total_pages}</td>
+                                        <td>{item.rating}</td>
+                                        <td>{item.isbn}</td>
+                                        <td>{item.published_date}</td>
+                                        <td>
+                                            <button
+                                                className="btn btn-sm btn-info"
+                                                style={{
+                                                    marginRight: "10px"
+                                                }}
+                                                data-toggle="modal"
+                                                data-target="#modalBooksManagement"
+                                                onClick={() =>
+                                                    setBookModalState(item)
+                                                }
+                                            >
+                                                Edit
+                                            </button>
+                                            {(
+                                                (
+                                                    JSON.parse(
+                                                        localStorage.getItem(
+                                                            "authorization"
+                                                        )
+                                                    ) || {}
+                                                ).user || {}
+                                            ).role === 1 ? (
                                                 <button
-                                                    className="btn btn-sm btn-info"
-                                                    style={{
-                                                        marginRight: "10px"
-                                                    }}
-                                                    data-toggle="modal"
-                                                    data-target="#modalBooksManagement"
+                                                    className="btn btn-sm btn-danger"
                                                     onClick={() =>
-                                                        this.setState({
-                                                            modal: item
-                                                        })
+                                                        removeData(item.id)
                                                     }
                                                 >
-                                                    Edit
+                                                    Hapus
                                                 </button>
-                                                {(
-                                                    (
-                                                        JSON.parse(
-                                                            localStorage.getItem(
-                                                                "authorization"
-                                                            )
-                                                        ) || {}
-                                                    ).user || {}
-                                                ).role === 1 ? (
-                                                    <button
-                                                        className="btn btn-sm btn-danger"
-                                                        onClick={() =>
-                                                            this.removeData(
-                                                                item.id
-                                                            )
-                                                        }
-                                                    >
-                                                        Hapus
-                                                    </button>
-                                                ) : null}
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
+                                            ) : null}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <ModalBooks state={this.state.modal} />
-            </>
-        );
-    }
-}
+            </div>
+            <ModalBooks />
+        </>
+    );
+};

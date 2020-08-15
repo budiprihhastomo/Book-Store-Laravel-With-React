@@ -1,15 +1,22 @@
-import React, { Component, useState } from "react";
+import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import { API_SERVER } from "../constant/values";
 import Modal from "../components/Modal";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { authorManagementState } from "../atom/global";
 
-const ModalBooks = props => {
-    const [modal, setModal] = useState({
-        first_name: props.state.first_name || "",
-        middle_name: props.state.first_name || "",
-        last_name: props.state.last_name || ""
-    });
+const ModalBooks = () => {
+    const authorModalState = useRecoilState(authorManagementState);
+    const setAuthorModalState = useSetRecoilState(authorManagementState);
+
     const saveData = () => {};
+
+    const onChangeHandle = ({ target }) => {
+        return setAuthorModalState(oldState => ({
+            ...oldState,
+            [target.name]: target.value
+        }));
+    };
 
     return (
         <Modal
@@ -31,10 +38,8 @@ const ModalBooks = props => {
                             name="first_name"
                             aria-describedby="first_name"
                             placeholder="First Name"
-                            value={props.state.first_name}
-                            onChange={({ target }) =>
-                                setModal({ ...modal, first_name: target.value })
-                            }
+                            value={authorModalState[0].first_name}
+                            onChange={onChangeHandle}
                         />
                     </div>
                     <div className="form-group">
@@ -47,8 +52,9 @@ const ModalBooks = props => {
                             id="isbn"
                             name="middle_name"
                             aria-describedby="middle_name"
-                            value={props.state.middle_name}
                             placeholder="Middle Name"
+                            value={authorModalState[0].middle_name}
+                            onChange={onChangeHandle}
                         />
                     </div>
                     <div className="form-group">
@@ -61,7 +67,8 @@ const ModalBooks = props => {
                             id="last_name"
                             name="last_name"
                             placeholder="Last Name"
-                            value={props.state.last_name}
+                            value={authorModalState[0].last_name}
+                            onChange={onChangeHandle}
                         />
                     </div>
                 </form>
@@ -70,20 +77,14 @@ const ModalBooks = props => {
     );
 };
 
-export default class AuthorsManagement extends Component {
-    constructor() {
-        super();
-        this.state = {
-            data: [],
-            modal: {}
-        };
-        this.removeData = this.removeData.bind(this);
-    }
-    componentDidMount() {
-        this.fetchData();
-    }
+export default () => {
+    const setAuthorModalState = useSetRecoilState(authorManagementState);
+    const [data, setData] = useState([]);
+    useEffect(() => {
+        fetchData();
+    }, []);
 
-    fetchData() {
+    const fetchData = () => {
         Axios.get(`${API_SERVER}/author`, {
             headers: {
                 authorization: (
@@ -92,12 +93,12 @@ export default class AuthorsManagement extends Component {
             }
         })
             .then(({ data }) => {
-                this.setState({ data: data.data });
+                setData(data.data);
             })
             .catch(err => console.error(err));
-    }
+    };
 
-    removeData(id) {
+    const removeData = id => {
         Axios.delete(`${API_SERVER}/author/${id}`, {
             headers: {
                 authorization:
@@ -106,88 +107,85 @@ export default class AuthorsManagement extends Component {
                         .access_token
             }
         })
-            .then(({ data }) => {
-                this.fetchData();
+            .then(() => {
+                fetchData();
             })
             .catch(err => console.error(err));
-    }
+    };
 
-    openModal(data) {
-        ModalBooks(data);
-    }
-
-    render() {
-        return (
-            <>
-                <div className="mt-5">
-                    <div className="card">
-                        <div className="card-header bg-transparent">
-                            Books Management
-                        </div>
-                        <div className="card-body">
-                            <table className="table">
-                                <thead>
-                                    <tr>
-                                        <th>Full Name</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {this.state.data.map((item, idx) => (
-                                        <tr key={idx}>
-                                            <td>
-                                                {item.first_name +
-                                                    " " +
-                                                    item.middle_name +
-                                                    " " +
-                                                    item.last_name}
-                                            </td>
-                                            <td>
+    return (
+        <>
+            <div className="mt-5">
+                <div className="card">
+                    <div className="card-header bg-transparent">
+                        Books Management
+                    </div>
+                    <div className="card-body">
+                        <table className="table">
+                            <thead>
+                                <tr>
+                                    <th>Full Name</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {data.map((item, idx) => (
+                                    <tr key={idx}>
+                                        <td>
+                                            {item.first_name +
+                                                " " +
+                                                item.middle_name +
+                                                " " +
+                                                item.last_name}
+                                        </td>
+                                        <td>
+                                            <button
+                                                className="btn btn-sm btn-info"
+                                                style={{
+                                                    marginRight: "10px"
+                                                }}
+                                                data-toggle="modal"
+                                                data-target="#modalAuthorsManagement"
+                                                onClick={() =>
+                                                    setAuthorModalState({
+                                                        first_name:
+                                                            item.first_name,
+                                                        middle_name:
+                                                            item.middle_name,
+                                                        last_name:
+                                                            item.last_name
+                                                    })
+                                                }
+                                            >
+                                                Edit
+                                            </button>
+                                            {(
+                                                (
+                                                    JSON.parse(
+                                                        localStorage.getItem(
+                                                            "authorization"
+                                                        )
+                                                    ) || {}
+                                                ).user || {}
+                                            ).role === 1 ? (
                                                 <button
-                                                    className="btn btn-sm btn-info"
-                                                    style={{
-                                                        marginRight: "10px"
-                                                    }}
-                                                    data-toggle="modal"
-                                                    data-target="#modalAuthorsManagement"
+                                                    className="btn btn-sm btn-danger"
                                                     onClick={() =>
-                                                        this.setState({
-                                                            modal: item
-                                                        })
+                                                        removeData(item.id)
                                                     }
                                                 >
-                                                    Edit
+                                                    Hapus
                                                 </button>
-                                                {(
-                                                    (
-                                                        JSON.parse(
-                                                            localStorage.getItem(
-                                                                "authorization"
-                                                            )
-                                                        ) || {}
-                                                    ).user || {}
-                                                ).role === 1 ? (
-                                                    <button
-                                                        className="btn btn-sm btn-danger"
-                                                        onClick={() =>
-                                                            this.removeData(
-                                                                item.id
-                                                            )
-                                                        }
-                                                    >
-                                                        Hapus
-                                                    </button>
-                                                ) : null}
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
+                                            ) : null}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <ModalBooks state={this.state.modal} />
-            </>
-        );
-    }
-}
+            </div>
+            <ModalBooks />
+        </>
+    );
+};

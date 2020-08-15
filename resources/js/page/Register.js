@@ -63,11 +63,12 @@ export default class Register extends Component {
                                 id="role"
                                 name="role"
                                 className="form-control"
+                                defaultValue=""
                                 onChange={({ target }) =>
                                     this.setState({ role: target.value })
                                 }
                             >
-                                <option selected disabled>
+                                <option value="" disabled>
                                     Choose Role
                                 </option>
                                 <option value="1">Admin</option>

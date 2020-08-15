@@ -1,6 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { RecoilRoot } from "recoil";
 
 import App from "./App";
 
-ReactDOM.render(<App />, document.getElementById("app"));
+const AppWrapper = () => (
+    <RecoilRoot>
+        <App />
+    </RecoilRoot>
+);
+
+ReactDOM.render(<AppWrapper />, document.getElementById("app"));
