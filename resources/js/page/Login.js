@@ -50,7 +50,7 @@ export default class Login extends Component {
                                 id="email"
                                 name="email"
                                 aria-describedby="email"
-                                placeholder="Enter email"
+                                placeholder="Enter Your E-mail"
                                 autoComplete="false"
                                 onChange={({ target }) =>
                                     this.setState({ email: target.value })
@@ -66,11 +66,20 @@ export default class Login extends Component {
                                 className="form-control"
                                 id="password"
                                 name="password"
-                                placeholder="Password"
+                                placeholder="Enter Your Password"
                                 onChange={({ target }) =>
                                     this.setState({ password: target.value })
                                 }
                             />
+                        </div>
+                        <div className="form-group">
+                            <a
+                                data-toggle="modal"
+                                href="#modalForgetPassword"
+                                data-dismiss="modal"
+                            >
+                                Forget Password ?
+                            </a>
                         </div>
                     </form>
                 </Modal>

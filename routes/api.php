@@ -24,9 +24,11 @@ Route::group([
     Route::post('register', 'AuthController@register');
     Route::post('token', 'AuthController@refresh');
     Route::post('password/forget', 'AuthController@forgot');
-    Route::post('password/reset', 'AuthController@reset')->name('password.reset');
+    Route::get('password/reset', 'AuthController@reset')->name('password.reset');
+    Route::post('password/reset', 'AuthController@reset');
     Route::post('/', 'AuthController@index');
 });
+
 
 Route::group(['middleware' => 'api'], function () {
     Route::group(['prefix' => "book"], function () {

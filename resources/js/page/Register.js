@@ -85,7 +85,7 @@ export default class Register extends Component {
                                 id="email_register"
                                 name="email_register"
                                 aria-describedby="email_register"
-                                placeholder="Enter email"
+                                placeholder="Enter Your E-mail"
                                 autoComplete="false"
                                 onChange={({ target }) =>
                                     this.setState({ email: target.value })
@@ -101,7 +101,7 @@ export default class Register extends Component {
                                 className="form-control"
                                 id="password_register"
                                 name="password_register"
-                                placeholder="Password"
+                                placeholder="Enter Your Password"
                                 onChange={({ target }) =>
                                     this.setState({ password: target.value })
                                 }

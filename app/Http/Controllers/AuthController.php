@@ -60,7 +60,7 @@ class AuthController extends Controller
 
     public function forgot()
     {
-        $credential = request()->validate(['email' => 'required|email']);
+        $credential = request()->validate(['email' => 'required|email|exists:users,email']);
         Password::sendResetLink($credential);
 
         return response()->json(['message' => "Link Reset Password telah dikirim Ke email " . $credential['email']]);
@@ -68,6 +68,7 @@ class AuthController extends Controller
 
     public function reset()
     {
+        if (request()->isMethod('GET')) return redirect('reset?token=' . request()->query('token') . '&email=' . request()->query('email'));
         $credential = request()->validate([
             'token' => 'required|string',
             'email' => 'required|email',
