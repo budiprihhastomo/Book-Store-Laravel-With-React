@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Authors;
 use App\Books;
+use Illuminate\Support\Facades\DB;
 
 class BookController extends Controller
 {
@@ -13,13 +13,16 @@ class BookController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Menampilkan Semua Data dan Juga Detail Data dari Database.
      *
-     * @return \Illuminate\Http\Response
+     * @return JSON
      */
     public function index($id = false)
     {
-        $data = $id ? Books::with('authors')->where('id', '=', $id)->get() : Books::with('authors')->get();
+        $query = Books::with(['authors' => function ($q) {
+            $q->select('authors.id as value', DB::raw("CONCAT(first_name,' ', middle_name,' ',last_name) AS label"));
+        }]);
+        $data = $id ? $query->where('id', '=', $id)->get() : $query->get();
         return response()->json([
             'status' => 200,
             'message' => "Berhasil Menampilkan Database.",
@@ -28,10 +31,10 @@ class BookController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Menyimpan dan Juga Memperbarui Record Ke Dalam Database.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  $id
+     * @return JSON
      */
     public function store($id = false)
     {
@@ -41,13 +44,14 @@ class BookController extends Controller
             'rating' => 'required|integer',
             'isbn' => 'required|integer',
             'published_date' => 'required|date',
-            'author' => ''
+            'authors' => ''
         ]);
 
         if ($id) {
-            $find = Books::find($id);
-            if ($find) {
-                $find->update($data);
+            $book = Books::find($id);
+            if ($book) {
+                $book->update($data);
+                $book->authors()->sync($data['authors']);
 
                 return response()->json([
                     'status' => $id ? 200 : 201,
@@ -61,16 +65,8 @@ class BookController extends Controller
                 'message' => "Data tidak ditemukan"
             ]);
         } else {
-            $book = new Books;
-            $book->title = $data['title'];
-            $book->total_pages = $data['total_pages'];
-            $book->rating = $data['rating'];
-            $book->isbn = $data['isbn'];
-            $book->published_date = $data['published_date'];
-            $book->save();
-
-            $author = Authors::find($data['author']);
-            $book->authors()->attach($author);
+            $book = Books::create($data);
+            $book->authors()->attach($data['authors']);
         }
 
         return response()->json([
@@ -81,15 +77,16 @@ class BookController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Menghapus Record Dari Database.
      *
-     * @param  \App\Book  $book
-     * @return \Illuminate\Http\Response
+     * @param  $id
+     * @return JSON
      */
     public function destroy($id)
     {
         $find = Books::find($id);
         if ($find) {
+            $find->authors()->detach();
             $find->delete();
         } else {
             return response()->json([

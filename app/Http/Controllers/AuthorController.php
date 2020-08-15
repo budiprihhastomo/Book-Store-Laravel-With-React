@@ -12,9 +12,9 @@ class AuthorController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Menampilkan Semua Data dan Juga Detail Data dari Database.
      *
-     * @return \Illuminate\Http\Response
+     * @return JSON
      */
     public function index($id = false)
     {
@@ -38,10 +38,10 @@ class AuthorController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Menyimpan dan Juga Memperbarui Record Ke Dalam Database.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  $id
+     * @return JSON
      */
     public function store($id = false)
     {
@@ -79,10 +79,10 @@ class AuthorController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Menghapus Record Dari Database.
      *
-     * @param  \App\Author  $author
-     * @return \Illuminate\Http\Response
+     * @param  $id
+     * @return JSON
      */
     public function destroy($id)
     {
