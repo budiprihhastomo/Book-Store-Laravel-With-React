@@ -21,7 +21,7 @@ class AuthorController extends Controller
         $data = $id ? Authors::with('books')->where('id', '=', $id)->get() : Authors::with('books')->get();
         return response()->json([
             'status' => 200,
-            'message' => "Berhasil Mengambil Menampilkan Database.",
+            'message' => "Berhasil Menampilkan Database.",
             'data' => $data,
         ], 200);
     }
@@ -29,10 +29,10 @@ class AuthorController extends Controller
     public function getAuthorByName()
     {
         $param = request()->input('name');
-        $data = Authors::where('first_name', 'LIKE', '%' . $param . '%')->orWhere('middle_name', 'LIKE', '%' . $param . '%')->orWhere('last_name', 'LIKE', '%' . $param . '%')->first();
+        $data = Authors::where('first_name', 'LIKE', '%' . $param . '%')->orWhere('middle_name', 'LIKE', '%' . $param . '%')->orWhere('last_name', 'LIKE', '%' . $param . '%')->get();
         return response()->json([
             'status' => 200,
-            'message' => "Berhasil Mengambil Menampilkan Database.",
+            'message' => "Berhasil Menampilkan Database.",
             'data' => $data,
         ], 200);
     }

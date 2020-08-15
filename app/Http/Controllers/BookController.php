@@ -22,7 +22,7 @@ class BookController extends Controller
         $data = $id ? Books::with('authors')->where('id', '=', $id)->get() : Books::with('authors')->get();
         return response()->json([
             'status' => 200,
-            'message' => "Berhasil Mengambil Menampilkan Database.",
+            'message' => "Berhasil Menampilkan Database.",
             'data' => $data,
         ], 200);
     }
