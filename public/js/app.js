@@ -73874,9 +73874,35 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
-var ModalBooks = function ModalBooks() {
+var ModalBooks = function ModalBooks(props) {
   var bookModalState = Object(recoil__WEBPACK_IMPORTED_MODULE_4__["useRecoilState"])(_atom_global__WEBPACK_IMPORTED_MODULE_5__["bookManagementState"]);
   var setBookModalState = Object(recoil__WEBPACK_IMPORTED_MODULE_4__["useSetRecoilState"])(_atom_global__WEBPACK_IMPORTED_MODULE_5__["bookManagementState"]);
+
+  var saveData = function saveData() {
+    if (bookModalState[0].id) {
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.patch("".concat(_constant_values__WEBPACK_IMPORTED_MODULE_2__["API_SERVER"], "/book/").concat(bookModalState[0].id), bookModalState[0], {
+        headers: {
+          authorization: "Bearer " + (JSON.parse(localStorage.getItem("authorization")) || {}).access_token
+        }
+      }).then(function (res) {
+        console.log(res);
+      })["catch"](function (err) {
+        return console.error(err);
+      });
+    } else {
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.post("".concat(_constant_values__WEBPACK_IMPORTED_MODULE_2__["API_SERVER"], "/book"), bookModalState[0], {
+        headers: {
+          authorization: "Bearer " + (JSON.parse(localStorage.getItem("authorization")) || {}).access_token
+        }
+      }).then(function (res) {
+        console.log(res);
+      })["catch"](function (err) {
+        return console.error(err);
+      });
+    }
+
+    props.onRefresh();
+  };
 
   var onChangeHandle = function onChangeHandle(_ref) {
     var target = _ref.target;
@@ -73889,7 +73915,7 @@ var ModalBooks = function ModalBooks() {
     name: "modalBooksManagement",
     title: "Books Management Form",
     actionNameButton: "Save",
-    actionButton: null
+    actionButton: saveData
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "container"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -73994,6 +74020,7 @@ var ModalBooks = function ModalBooks() {
       setData = _useState2[1];
 
   var setBookModalState = Object(recoil__WEBPACK_IMPORTED_MODULE_4__["useSetRecoilState"])(_atom_global__WEBPACK_IMPORTED_MODULE_5__["bookManagementState"]);
+  var resetBookModalState = Object(recoil__WEBPACK_IMPORTED_MODULE_4__["useResetRecoilState"])(_atom_global__WEBPACK_IMPORTED_MODULE_5__["bookManagementState"]);
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
     fetchData();
   }, []);
@@ -74029,7 +74056,14 @@ var ModalBooks = function ModalBooks() {
     className: "card"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "card-header bg-transparent"
-  }, "Books Management"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "d-flex justify-content-between"
+  }, "Book Management", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    className: "btn btn-sm btn-success",
+    "data-toggle": "modal",
+    "data-target": "#modalBooksManagement",
+    onClick: resetBookModalState
+  }, "+"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "card-body"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
     className: "table"
@@ -74051,8 +74085,10 @@ var ModalBooks = function ModalBooks() {
       onClick: function onClick() {
         return removeData(item.id);
       }
-    }, "Hapus") : null));
-  })))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ModalBooks, null));
+    }, "Delete") : null));
+  })))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ModalBooks, {
+    onRefresh: fetchData
+  }));
 });
 
 /***/ }),

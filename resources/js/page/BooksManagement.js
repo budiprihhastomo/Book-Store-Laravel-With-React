@@ -2,12 +2,52 @@ import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import { API_SERVER } from "../constant/values";
 import Modal from "../components/Modal";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState, useResetRecoilState } from "recoil";
 import { bookManagementState } from "../atom/global";
 
-const ModalBooks = () => {
+const ModalBooks = props => {
     const bookModalState = useRecoilState(bookManagementState);
     const setBookModalState = useSetRecoilState(bookManagementState);
+
+    const saveData = () => {
+        if (bookModalState[0].id) {
+            Axios.patch(
+                `${API_SERVER}/book/${bookModalState[0].id}`,
+                bookModalState[0],
+                {
+                    headers: {
+                        authorization:
+                            "Bearer " +
+                            (
+                                JSON.parse(
+                                    localStorage.getItem("authorization")
+                                ) || {}
+                            ).access_token
+                    }
+                }
+            )
+                .then(res => {
+                    console.log(res);
+                })
+                .catch(err => console.error(err));
+        } else {
+            Axios.post(`${API_SERVER}/book`, bookModalState[0], {
+                headers: {
+                    authorization:
+                        "Bearer " +
+                        (
+                            JSON.parse(localStorage.getItem("authorization")) ||
+                            {}
+                        ).access_token
+                }
+            })
+                .then(res => {
+                    console.log(res);
+                })
+                .catch(err => console.error(err));
+        }
+        props.onRefresh();
+    };
 
     const onChangeHandle = ({ target }) => {
         return setBookModalState(oldState => ({
@@ -20,7 +60,7 @@ const ModalBooks = () => {
             name="modalBooksManagement"
             title="Books Management Form"
             actionNameButton="Save"
-            actionButton={null}
+            actionButton={saveData}
         >
             <div className="container">
                 <form>
@@ -112,6 +152,7 @@ const ModalBooks = () => {
 export default () => {
     const [data, setData] = useState([]);
     const setBookModalState = useSetRecoilState(bookManagementState);
+    const resetBookModalState = useResetRecoilState(bookManagementState);
 
     useEffect(() => {
         fetchData();
@@ -151,7 +192,17 @@ export default () => {
             <div className="mt-5">
                 <div className="card">
                     <div className="card-header bg-transparent">
-                        Books Management
+                        <div className="d-flex justify-content-between">
+                            Book Management
+                            <button
+                                className="btn btn-sm btn-success"
+                                data-toggle="modal"
+                                data-target="#modalBooksManagement"
+                                onClick={resetBookModalState}
+                            >
+                                +
+                            </button>
+                        </div>
                     </div>
                     <div className="card-body">
                         <table className="table">
@@ -202,7 +253,7 @@ export default () => {
                                                         removeData(item.id)
                                                     }
                                                 >
-                                                    Hapus
+                                                    Delete
                                                 </button>
                                             ) : null}
                                         </td>
@@ -213,7 +264,7 @@ export default () => {
                     </div>
                 </div>
             </div>
-            <ModalBooks />
+            <ModalBooks onRefresh={fetchData} />
         </>
     );
 };
