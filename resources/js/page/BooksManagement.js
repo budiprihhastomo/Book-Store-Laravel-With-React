@@ -1,37 +1,39 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
-import { API_SERVER } from "../constant/values";
 import Modal from "../components/Modal";
 import { useRecoilState, useSetRecoilState, useResetRecoilState } from "recoil";
+import { API_SERVER } from "../constant/values";
 import { bookManagementState } from "../atom/global";
+import Select from "../components/CustomSelect";
 
 const ModalBooks = props => {
     const bookModalState = useRecoilState(bookManagementState);
     const setBookModalState = useSetRecoilState(bookManagementState);
 
     const saveData = () => {
+        const data = { ...bookModalState[0] };
+
+        data.author = data.author.reduce((s, v) => {
+            s = [...s, v.value];
+            return s;
+        }, []);
         if (bookModalState[0].id) {
-            Axios.patch(
-                `${API_SERVER}/book/${bookModalState[0].id}`,
-                bookModalState[0],
-                {
-                    headers: {
-                        authorization:
-                            "Bearer " +
-                            (
-                                JSON.parse(
-                                    localStorage.getItem("authorization")
-                                ) || {}
-                            ).access_token
-                    }
+            Axios.patch(`${API_SERVER}/book/${bookModalState[0].id}`, data, {
+                headers: {
+                    authorization:
+                        "Bearer " +
+                        (
+                            JSON.parse(localStorage.getItem("authorization")) ||
+                            {}
+                        ).access_token
                 }
-            )
+            })
                 .then(res => {
                     console.log(res);
                 })
                 .catch(err => console.error(err));
         } else {
-            Axios.post(`${API_SERVER}/book`, bookModalState[0], {
+            Axios.post(`${API_SERVER}/book`, data, {
                 headers: {
                     authorization:
                         "Bearer " +
@@ -55,6 +57,7 @@ const ModalBooks = props => {
             [target.name]: target.value
         }));
     };
+
     return (
         <Modal
             name="modalBooksManagement"
@@ -99,6 +102,16 @@ const ModalBooks = props => {
                             <option value="4">4</option>
                             <option value="5">5</option>
                         </select>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="author">
+                            Author <span style={{ color: "red" }}>*</span>
+                        </label>
+                        <Select
+                            onChange={author =>
+                                setBookModalState(old => ({ ...old, author }))
+                            }
+                        />
                     </div>
                     <div className="form-group">
                         <label htmlFor="email">

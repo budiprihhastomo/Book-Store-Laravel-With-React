@@ -18,6 +18,7 @@ export const bookManagementState = atom({
         rating: "",
         isbn: "",
         total_pages: 0,
-        published_date: ""
+        published_date: "",
+        author: []
     }
 });
