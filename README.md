@@ -6,8 +6,6 @@ Book Store is an application about book management CRUD. This application was cr
 
 Laravel is accessible, powerful, and provides tools required for large, robust applications and React is an easy, simple, and lightweight library.
 
----
-
 ## ✨ Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
@@ -15,8 +13,6 @@ These instructions will get you a copy of the project up and running on your loc
 ### Prerequisites
 
 To run this project, yarn / npm tools and composer are needed and make sure you have imported the book_store.sql database which is already available in this project.
-
----
 
 ## 🚀 Installation And Usage
 
@@ -58,8 +54,6 @@ npm run dev
 php artisan serve
 ```
 
----
-
 ## ✅ API Documentation
 
 ### Authorization API
@@ -71,8 +65,6 @@ php artisan serve
 | /api/auth/logout          | POST   | used for logout or destroy the user session. | Header Request :<br>Authorization: string                                                        |
 | /api/auth/password/reset  | POST   | used for reset password user.                | Query Params Request :<br>token: string, email: string<br><br>Body Request :<br>password: string |
 | /api/auth/password/forget | POST   | used for forgot password user.               | Body Request :<br>email: string                                                                  |
-
----
 
 ### Books API
 
@@ -97,8 +89,6 @@ php artisan serve
 
 ## 📷 Screenshoot
 
----
-
 -   Dashboard (Non-Auth User)
     ![alt text](https://gitlab.com/budiprihhastomo/book-store/-/raw/master/docs/images/Dashboard.PNG)
 -   Books Page
@@ -113,8 +103,6 @@ php artisan serve
 ## 👤 Author
 
 -   Budi Prih Hastomo
-
----
 
 ## 📝 License
 
