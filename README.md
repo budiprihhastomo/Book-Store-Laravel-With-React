@@ -100,15 +100,15 @@ php artisan serve
 ---
 
 -   Dashboard (Non-Auth User)
-    ![alt text](https://github.com/budiprihhastomo/book-store/blob/book-store/docs/images/Dashboard.PNG?raw=true)
+    ![alt text](https://gitlab.com/budiprihhastomo/book-store/blob/book-store/docs/images/Dashboard.PNG?raw=true)
 -   Books Page
-    ![alt text](https://github.com/[username]/book-store/blob/book-store/docs/images/Books.PNG?raw=true)
+    ![alt text](https://gitlab.com/[username]/book-store/blob/book-store/docs/images/Books.PNG?raw=true)
 -   Authors Page
-    ![alt text](https://github.com/[username]/book-store/blob/book-store/docs/images/Authors.PNG?raw=true)
+    ![alt text](https://gitlab.com/[username]/book-store/blob/book-store/docs/images/Authors.PNG?raw=true)
 -   Modal Create And Update Book
-    ![alt text](https://github.com/[username]/book-store/blob/book-store/docs/images/BooksModal.PNG?raw=true)
+    ![alt text](https://gitlab.com/[username]/book-store/blob/book-store/docs/images/BooksModal.PNG?raw=true)
 -   Modal Create And Update Author
-    ![alt text](https://github.com/[username]/book-store/blob/book-store/docs/images/AuthorsModal.PNG?raw=true)
+    ![alt text](https://gitlab.com/[username]/book-store/blob/book-store/docs/images/AuthorsModal.PNG?raw=true)
 
 ## 👤 Author
 
