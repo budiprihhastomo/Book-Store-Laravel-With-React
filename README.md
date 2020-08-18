@@ -95,6 +95,21 @@ php artisan serve
 | /api/author/:id  | PATCH  | used for update author from database.         | Header Request : <br>Authorization: string <br><br>Params Request :<br>id: integer<br><br>Body Request : <br>title: string, total_pages: integer, rating: integer, isbn: integer, published_date: string, authors: string[] |
 | /api/author/:id  | DELETE | used for delete author from database.         | Header Request : <br>Authorization: string <br><br>Params Request :<br>id: integer<br><br>Body Request : <br>title: string, total_pages: integer, rating: integer, isbn: integer, published_date: string, authors: string[] |
 
+## Screenshoot Frontend
+
+---
+
+-   Dashboard (Non-Auth User)
+    ![alt text](https://github.com/budiprihhastomo/book-store/blob/book-store/docs/images/image.jpg?raw=true)
+-   Books Page
+    ![alt text](https://github.com/[username]/book-store/blob/book-store/docs/images/image.jpg?raw=true)
+-   Authors Page
+    ![alt text](https://github.com/[username]/book-store/blob/book-store/docs/images/image.jpg?raw=true)
+-   Modal Create And Update Book
+    ![alt text](https://github.com/[username]/book-store/blob/book-store/docs/images/image.jpg?raw=true)
+-   Modal Create And Update Author
+    ![alt text](https://github.com/[username]/book-store/blob/book-store/docs/images/image.jpg?raw=true)
+
 ## 👤 Author
 
 -   Budi Prih Hastomo
