@@ -74,7 +74,7 @@ php artisan serve
 | /api/book/:id | GET    | used for show detail of book from database. | Params Request :<br>id: integer                                                                                                                                                                                             |
 | /api/book     | POST   | used for create new book into database.     | Header Request :<br>Authorization: string<br><br>Body Request :<br>title: string, total_pages: integer, rating: integer, isbn: integer, published_date: string, authors: string[]                                           |
 | /api/book/:id | PATCH  | used for update book from database.         | Header Request : <br>Authorization: string <br><br>Params Request :<br>id: integer<br><br>Body Request : <br>title: string, total_pages: integer, rating: integer, isbn: integer, published_date: string, authors: string[] |
-| /api/book/:id | DELETE | used for delete book from database.         | Header Request : <br>Authorization: string <br><br>Params Request :<br>id: integer<br><br>Body Request : <br>title: string, total_pages: integer, rating: integer, isbn: integer, published_date: string, authors: string[] |
+| /api/book/:id | DELETE | used for delete book from database.         | Header Request : <br>Authorization: string <br><br>Params Request :<br>id: integer |
 
 ### Author API
 
@@ -85,7 +85,7 @@ php artisan serve
 | /api/author/find | GET    | used for show detail of author from database. | Query Params Request :<br>name: integer                                                                                                                                                                                     |
 | /api/author      | POST   | used for create new author into database.     | Header Request :<br>Authorization: string<br><br>Body Request :<br>title: string, total_pages: integer, rating: integer, isbn: integer, published_date: string, authors: string[]                                           |
 | /api/author/:id  | PATCH  | used for update author from database.         | Header Request : <br>Authorization: string <br><br>Params Request :<br>id: integer<br><br>Body Request : <br>title: string, total_pages: integer, rating: integer, isbn: integer, published_date: string, authors: string[] |
-| /api/author/:id  | DELETE | used for delete author from database.         | Header Request : <br>Authorization: string <br><br>Params Request :<br>id: integer<br><br>Body Request : <br>title: string, total_pages: integer, rating: integer, isbn: integer, published_date: string, authors: string[] |
+| /api/author/:id  | DELETE | used for delete author from database.         | Header Request : <br>Authorization: string <br><br>Params Request :<br>id: integer |
 
 ## 📷 Screenshoot
 
