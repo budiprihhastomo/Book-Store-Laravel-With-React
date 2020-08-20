@@ -26,6 +26,16 @@ git clone https://gitlab.com/budiprihhastomo/book-store.git
 git clone https://github.com/budiprihhastomo/book-store.git
 ```
 
+-   Run this command, to install dependency for running the application.
+
+```
+composer install && npm install
+
+-- or --
+
+composer install && yarn install
+```
+
 -   Run this command, to migrate the database to your local machine.
 
 ```
@@ -37,16 +47,6 @@ php artisan jwt:secret
 
 :: Create Secret Key Laravel App
 php artisan key:generate
-```
-
--   Run this command, to install dependency for running the application.
-
-```
-npm install && composer install
-
--- or --
-
-yarn install && composer install
 ```
 
 -   Run this command, to running the application, you can running 2 terminal / CMD.
