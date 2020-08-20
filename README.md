@@ -12,7 +12,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-To run this project, yarn / npm tools and composer are needed and make sure you have imported the book_store.sql database which is already available in this project.
+To run this project, yarn / npm tools and composer are needed and make sure you have imported the book_store.sql database which is already available in this project. Don't forget to setup the ENVIRONTMENT_VARIBALE or .env file.
 
 ## 🚀 Installation And Usage
 
@@ -35,17 +35,17 @@ php artisan migrate --seed
 -   Run this command, to install dependency for running the application.
 
 ```
-npm install
+npm install && composer install
 
 -- or --
 
-yarn install
+yarn install && composer install
 ```
 
 -   Run this command, to running the application, you can running 2 terminal / CMD.
 
 ```
-:: Command To Running Frontend Service (React)
+:: Command To Build Frontend Service (React)
 npm run dev
 
 -- and --
