@@ -29,7 +29,14 @@ git clone https://github.com/budiprihhastomo/book-store.git
 -   Run this command, to migrate the database to your local machine.
 
 ```
+:: Call Action to Migrate Database
 php artisan migrate --seed
+
+:: Create JWT Secret Key
+php artisan jwt:secret
+
+:: Create Secret Key Laravel App
+php artisan key:generate
 ```
 
 -   Run this command, to install dependency for running the application.
