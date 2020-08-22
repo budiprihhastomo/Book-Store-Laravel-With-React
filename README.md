@@ -30,7 +30,6 @@ git clone https://github.com/budiprihhastomo/Book-Store-Laravel-With-React.git
 
 ```
 composer install && npm install
-
 -- or --
 
 composer install && yarn install
