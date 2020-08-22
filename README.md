@@ -19,11 +19,11 @@ To run this project, yarn / npm tools and composer are needed and make sure you 
 -   Run this command, to clone the project.
 
 ```
-git clone https://gitlab.com/budiprihhastomo/book-store.git
+git clone https://gitlab.com/budiprihhastomo/Book-Store-Laravel-With-React.git
 
 -- or --
 
-git clone https://github.com/budiprihhastomo/book-store.git
+git clone https://github.com/budiprihhastomo/Book-Store-Laravel-With-React.git
 ```
 
 -   Run this command, to install dependency for running the application.
